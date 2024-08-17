@@ -1,0 +1,49 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: "unless-stopped"
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres1234
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "postgres"]
+      interval: 20s
+      timeout: 60s
+      retries: 5
+      start_period: 10s
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    restart: "unless-stopped"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: nikos@thom.com
+      PGADMIN_DEFAULT_PASSWORD: niktom
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  catalog-api:
+    container_name: catalog-api
+    image: nikosdmthom/catalog-api:latest
+    build:
+      context: .
+      dockerfile: Services/Catalog/Catalog.Api/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
