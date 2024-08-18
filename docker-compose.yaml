@@ -32,6 +32,13 @@ services:
       postgres:
         condition: service_healthy
 
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: "unless-stopped"
+    ports:
+      - "6379:6379"
+
   catalog-api:
     container_name: catalog-api
     image: nikosdmthom/catalog-api:latest
@@ -39,6 +46,8 @@ services:
     build:
       context: .
       dockerfile: Services/Catalog/Catalog.Api/Dockerfile
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8080
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -53,12 +62,16 @@ services:
     build:
       context: .
       dockerfile: Services/Basket/Basket.Api/Dockerfile
+    environment:
+      - ASPNETCORE_HTTP_PORTS=7070
     ports:
       - "7070:7070"
       - "7071:7071"
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
 
 volumes:
   postgres_data:

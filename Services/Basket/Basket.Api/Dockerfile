@@ -20,8 +20,8 @@ RUN dotnet publish -c $BUILD_CONFIGURATION -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.4
 
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 7070
+EXPOSE 7071
 
 COPY --from=build /app/publish .
 

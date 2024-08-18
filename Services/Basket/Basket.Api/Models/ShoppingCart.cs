@@ -8,7 +8,7 @@ namespace Basket.Api.Models
 
         public ShoppingCart(string Username)
         {
-            
+            this.Username = Username;
         }
 
         // Required for mapping
