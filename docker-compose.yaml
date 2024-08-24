@@ -47,13 +47,15 @@ services:
       context: .
       dockerfile: Services/Catalog/Catalog.Api/Dockerfile
     environment:
-      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTP_PORTS=9090
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "9090:9090"
+      - "9091:9091"
     depends_on:
       postgres:
         condition: service_healthy
+      discount-grpc:
+        condition: service_started
 
   basket-api:
     container_name: basket-api
@@ -72,6 +74,19 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+
+  discount-grpc:
+    container_name: discount-grpc
+    image: nikosdmthom/discount-grpc:latest
+    restart: "unless-stopped"
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.Grpc/Dockerfile
+    environment:
+      - ASPNETCORE_HTTP_PORTS=6060
+    ports:
+      - "6060:6060"
+      - "6061:6061"
 
 volumes:
   postgres_data:

@@ -3,6 +3,7 @@ using Basket.Api.Models;
 using BuildingBlocks.Behaviours;
 using BuildingBlocks.Exceptions.handler;
 using Carter;
+using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Marten;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -33,6 +34,12 @@ builder.Services.AddMarten(opts =>
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
+// Add Grpc Services
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options => 
+{
+    options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]);
+});
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
