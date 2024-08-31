@@ -21,18 +21,21 @@ namespace Ordering.Application.Orders.Queries.GetOrders
             var totalCount = await dbContext.Orders.LongCountAsync(cancellationToken);
 
             var orders = await dbContext.Orders
-                        .Include(o => o.OrderItems)
                         .OrderBy(o => o.OrderName.Value)
                         .Skip(pageSize * pageIndex)
                         .Take(pageSize)
                         .ToListAsync(cancellationToken);
+
+            var orderItems = await dbContext.OrderItems
+                .Where(oi => orders.Select(o => o.Id).Contains(oi.OrderId))
+                .ToListAsync(cancellationToken);
 
             return new GetOrdersResult(
                 new PaginatedResult<OrderDTO>(
                     pageIndex,
                     pageSize,
                     totalCount,
-                    orders.ToOrderDTOList()));        
+                    orders.ToOrderDTOList(orderItems)));        
         }
     }
 }

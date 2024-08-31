@@ -22,8 +22,10 @@ namespace Ordering.Infrastructure.Data.Configurations
                 .WithMany()
                 .HasForeignKey(o => o.ProductId);
 
+            builder.HasIndex(i => i.ProductId);
+
             builder.Property(o => o.Quantity).IsRequired();
-            builder.Property(o => o.Price).IsRequired();
+            builder.Property(o => o.Price).HasPrecision(18, 2).IsRequired();
         }
     }
 }

@@ -14,13 +14,16 @@ namespace Ordering.Application.Orders.Queries.GetOrdersByName
             // return result
 
             var orders = await dbContext.Orders
-                .Include(o => o.OrderItems)
                 .AsNoTracking()
                 .Where(o => o.OrderName.Value.Contains(query.Name))
                 .OrderBy(o => o.OrderName.Value)
                 .ToListAsync(cancellationToken);                
 
-            return new GetOrdersByNameResult(orders.ToOrderDTOList());
+            var orderItems = await dbContext.OrderItems
+                .Where(oi => orders.Select(o => o.Id).Contains(oi.OrderId))
+                .ToListAsync(cancellationToken);
+
+            return new GetOrdersByNameResult(orders.ToOrderDTOList(orderItems));
         }    
     }
 }
