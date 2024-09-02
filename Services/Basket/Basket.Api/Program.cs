@@ -2,6 +2,7 @@ using Basket.Api.Data;
 using Basket.Api.Models;
 using BuildingBlocks.Behaviours;
 using BuildingBlocks.Exceptions.handler;
+using BuildingBlocks.Messaging.MassTransit;
 using Carter;
 using Discount.Grpc;
 using HealthChecks.UI.Client;
@@ -40,6 +41,8 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
 {
     options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]);
 });
+
+builder.Services.AddMessageBroker(builder.Configuration);
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {

@@ -9,6 +9,7 @@ COPY Services/Ordering/Ordering.Application/Ordering.Application.csproj Services
 COPY Services/Ordering/Ordering.Domain/Ordering.Domain.csproj Services/Ordering/Ordering.Domain/
 COPY Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj Services/Ordering/Ordering.Infrastructure/
 COPY BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj
+COPY BuildingBlocks/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj BuildingBlocks/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj
 # Restore 
 RUN dotnet restore "./Services/Ordering/Ordering.Api/Ordering.Api.csproj"
 COPY . .

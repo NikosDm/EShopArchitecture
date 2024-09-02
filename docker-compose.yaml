@@ -58,6 +58,24 @@ services:
     ports:
       - "1433:1433"
 
+  # Default creds: guest / guest
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    restart: "unless-stopped"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmqctl status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
   catalog-api:
     container_name: catalog-api
     image: nikosdmthom/catalog-api:latest
@@ -91,6 +109,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
       redis:
         condition: service_started
 
@@ -122,5 +142,8 @@ services:
     depends_on:
       sqlserver:
         condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
 volumes:
   postgres_data:

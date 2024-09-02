@@ -6,6 +6,7 @@ WORKDIR /app
 # Copy csproj files
 COPY Services/Basket/Basket.Api/Basket.Api.csproj Services/Basket/Basket.Api/Basket.Api.csproj
 COPY BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj
+COPY BuildingBlocks/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj BuildingBlocks/BuildingBlocks.Messaging/BuildingBlocks.Messaging.csproj
 # Restore 
 RUN dotnet restore "./Services/Basket/Basket.Api/Basket.Api.csproj"
 COPY . .
