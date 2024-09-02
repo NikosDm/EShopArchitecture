@@ -19,6 +19,12 @@ namespace BuildingBlocks.Messaging.MassTransit
 
                 config.UsingRabbitMq((context, configurator) =>
                 {
+                    configurator.UseMessageRetry(r => 
+                    {
+                        r.Handle<RabbitMqConnectionException>();
+                        r.Interval(5, TimeSpan.FromSeconds(10));
+                    });
+
                     configurator.Host(new Uri(configuration["MessageBroker:Host"]!), host =>
                     {
                         host.Username(configuration["MessageBroker:UserName"]);

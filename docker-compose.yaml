@@ -145,5 +145,25 @@ services:
       rabbitmq:
         condition: service_healthy
 
+  api-gateway:
+    container_name: api-gateway
+    image: nikosdmthom/api-gateway:latest
+    restart: "unless-stopped"
+    build:
+      context: .
+      dockerfile: ApiGateways/YarpApiGateway/Dockerfile
+    environment:
+      - ASPNETCORE_HTTP_PORTS=9900
+    ports:
+      - "9900:9900"
+      - "9901:9901"
+    depends_on:
+      ordering-api:
+        condition: service_started
+      basket-api:
+        condition: service_started
+      catalog-api:
+        condition: service_started
+
 volumes:
   postgres_data:
