@@ -165,5 +165,21 @@ services:
       catalog-api:
         condition: service_started
 
+  shopping-web:
+    container_name: shopping-web
+    image: nikosdmthom/shopping-web:latest
+    restart: "unless-stopped"
+    build:
+      context: .
+      dockerfile: WebApps/Shopping.Web/Dockerfile
+    environment:
+      - ASPNETCORE_HTTP_PORTS=3000
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    depends_on:
+      api-gateway:
+        condition: service_started
+
 volumes:
   postgres_data:
