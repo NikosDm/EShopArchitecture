@@ -39,6 +39,9 @@ builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("PostgresDB"));
 
+var example1 = "asdasdas";
+var example2 = 465464654;
+
 var app = builder.Build();
 
 app.MapCarter();
